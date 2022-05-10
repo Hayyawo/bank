@@ -45,24 +45,21 @@ public class InMemoryClientRepositoryTest {
     }
 
 
+
     @Test
-    public void deleteClientIsDeletingCorrectly() {
-        //given
-        final String email = "a@a.pl";
-        Client expectedClient = new Client("alek", email, 100);
-        //when
-        repository.save(expectedClient);
-        //then
-        Client actualClient = repository.findByEmail("a@a.pl");
+    public void deleteClient_deleteOk(){
+        String email = "a@a.pl";
+        Client expectedtClient = new Client("alek",email,100);
+        clients.add(expectedtClient);
 
-        assertEquals(expectedClient, actualClient);
+        repository.deleteClient(email);
 
+        Assertions.assertFalse(clients.contains(expectedtClient));
     }
 
     @Test
     public void deleteClients_invalidEmail(){
         String email = "invalid@email";
-        Client client = new Client("alek",email,100);
 
         Assertions.assertThrows(IllegalArgumentException.class,()->repository.deleteClient(email));
     }
@@ -71,6 +68,7 @@ public class InMemoryClientRepositoryTest {
     public void deleteClients_nullMail_throwIllegalArgumentException(){
         String mail = null;
         Client client = new Client("alek",mail,100);
+        clients.add(client);
 
         Assertions.assertThrows(IllegalArgumentException.class,()-> repository.deleteClient(mail));
     }
@@ -80,6 +78,7 @@ public class InMemoryClientRepositoryTest {
         double balance = 100;
         String email = "a@a.pl";
         Client client = new Client("alek",email,balance);
+        clients.add(client);
 
         Assertions.assertThrows(IllegalArgumentException.class,()-> repository.deleteClient(email));
     }

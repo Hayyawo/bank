@@ -31,7 +31,18 @@ public class InMemoryClientRepository implements ClientRepository {
     }
 
     public void deleteClient(String email) {
-         clients.remove(findByEmail(email));
+        if (email == null){
+            throw new IllegalArgumentException("email cannot be null");
+        }
+        Client client = findByEmail(email);
+        if(!clients.contains(client)){
+            throw new IllegalArgumentException("client with following email not found");
+        }
+        if (client.getBalance() != 0){
+            throw new IllegalArgumentException("cannot remove client with balance !=0");
+        }
+
+         clients.remove(client);
 
     }
 
