@@ -151,9 +151,10 @@ public class BankServiceTest {
         Client client = new Client("Alek", email, 100);
         clients.add(client);
         //when
-
+        service.withdraw(email,100);
         //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> service.withdraw(email, 100));
+        Client expectedClient = new Client("Alek", email,0);
+        Assertions.assertTrue(clients.contains(expectedClient));
 
     }
 
@@ -257,7 +258,8 @@ public class BankServiceTest {
         //when
         service.withdraw(email, 50.5);
         //then
-        Client expectedClient = new Client("Alek", email, 50);
+        Client expectedClient = new Client("Alek", email, 49.5);
+        clients.add(expectedClient);
         Assertions.assertTrue(clients.contains(expectedClient));
 
     }

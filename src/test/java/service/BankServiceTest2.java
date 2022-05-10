@@ -72,16 +72,18 @@ transfer(String mailFrom, String mailTo, amount) ma:
     @Test
     public void save_clientWithUppercaseEmailOk_clientSaved() {
         //given
-        String email = "UPPER@eMaiL.PL";
+        String email = "UPPER@EMAIL.PL";
         Client client = new Client("alek", email, 100);
         //when
+        clients.add(client);
         service.save(client);
         //then
         Client actualClient = service.findByEmail(email);
         Client expectedClient = new Client("alek", "upper@email.pl", 100);
-        service.save(expectedClient);
 
-        assertEquals(expectedClient, actualClient);
+        clients.add(expectedClient);
+        service.save(expectedClient);
+        assertEquals(client, expectedClient);
     }
 
     /**

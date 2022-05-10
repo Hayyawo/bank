@@ -58,10 +58,11 @@ public class BankService {
         }
 
         Client byEmail = clientRepository.findByEmail(email.toLowerCase());
-        byEmail.setBalance(byEmail.getBalance() - amount);
+
         if (byEmail.getBalance() - amount < 0) {
             throw new IllegalArgumentException("Cannot withdraw more than u got on ac");
         }
+        byEmail.setBalance(byEmail.getBalance() - amount);
     }
 
 }

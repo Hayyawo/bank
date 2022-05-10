@@ -1,11 +1,9 @@
 package org.kaczucha.repository;
 
+import com.sun.source.tree.IfTree;
 import org.kaczucha.Client;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryClientRepository implements ClientRepository {
     private List<Client> clients;
@@ -25,24 +23,24 @@ public class InMemoryClientRepository implements ClientRepository {
             throw new IllegalArgumentException("cannot add same client with same @");
 
         }
-
         client.setEmail(client.getEmail().toLowerCase());
+
         clients.add(client);
     }
 
     public void deleteClient(String email) {
-        if (email == null){
+        if (email == null) {
             throw new IllegalArgumentException("email cannot be null");
         }
         Client client = findByEmail(email);
-        if(!clients.contains(client)){
+        if (!clients.contains(client)) {
             throw new IllegalArgumentException("client with following email not found");
         }
-        if (client.getBalance() != 0){
+        if (client.getBalance() != 0) {
             throw new IllegalArgumentException("cannot remove client with balance !=0");
         }
 
-         clients.remove(client);
+        clients.remove(client);
 
     }
 
