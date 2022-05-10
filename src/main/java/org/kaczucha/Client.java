@@ -21,7 +21,8 @@ public class Client {
     public double getBalance() {
         return balance;
     }
-//change
+
+    //change
     public void setEmail(String email) {
         this.email = email;
     }

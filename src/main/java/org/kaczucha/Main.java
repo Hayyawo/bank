@@ -3,6 +3,7 @@ package org.kaczucha;
 import org.kaczucha.repository.InMemoryClientRepository;
 import org.kaczucha.service.BankService;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class Main {
     }
 
     public void run() {
-        InMemoryClientRepository repository = new InMemoryClientRepository(new HashSet<>());
+        InMemoryClientRepository repository = new InMemoryClientRepository(new ArrayList<>());
         bankService = new BankService(repository);
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
