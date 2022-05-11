@@ -38,6 +38,8 @@ transfer(String mailFrom, String mailTo, amount) ma:
      */
 
     private BankService service;
+
+    //todo zamockuj repo i usuń tą listę, ciulu
     private List<Client> clients;
 
 
@@ -97,7 +99,7 @@ transfer(String mailFrom, String mailTo, amount) ma:
         //when
         //then
 
-        Assertions.assertThrows(NullPointerException.class, () -> service.save(client));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> service.save(client));
     }
 
     /**
@@ -138,7 +140,7 @@ transfer(String mailFrom, String mailTo, amount) ma:
     @Test
     public void findByEmail_nonExistingEmailInput_throwsNoSuchElementException() {
         //given/when/then
-        Assertions.assertThrows(NoSuchElementException.class, () ->
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
             service.findByEmail("invalid_email@wp.pl"));
 
     }

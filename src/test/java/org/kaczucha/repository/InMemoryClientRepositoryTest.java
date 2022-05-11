@@ -49,7 +49,7 @@ public class InMemoryClientRepositoryTest {
     @Test
     public void deleteClient_deleteOk(){
         String email = "a@a.pl";
-        Client expectedtClient = new Client("alek",email,100);
+        Client expectedtClient = new Client("alek",email,0);
         clients.add(expectedtClient);
 
         repository.deleteClient(email);

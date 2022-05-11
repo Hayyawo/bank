@@ -4,22 +4,38 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kaczucha.Client;
+import org.kaczucha.repository.ClientRepository;
 import org.kaczucha.repository.InMemoryClientRepository;
 import org.kaczucha.service.BankService;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
+@ExtendWith(MockitoExtension.class)
 public class BankServiceTest {
+
+    @Mock
+    private ClientRepository clientRepository;
     private BankService service;
+
+    //
+
+    //todo usuń to ciulu
     private List<Client> clients;
+    //
 
 
     @BeforeEach
     public void setup() {
-        service = new BankService(new InMemoryClientRepository(new ArrayList<>()));
+        service = new BankService(clientRepository);
         clients = new ArrayList<>();
         service = new BankService(new InMemoryClientRepository(clients));
     }
@@ -27,6 +43,7 @@ public class BankServiceTest {
     @Test
     public void transfer_allParamsOk_fundsTransferred() {
         //given
+        Mockito.when(clientRepository.findByEmail(ArgumentMatchers.anyString())).thenReturn(Optional.empty());
         final String emailFrom = "a@a.pl";
         final String emailTo = "b@b.pl";
         final Client clientFrom = new Client("Alek", emailFrom, 1000);

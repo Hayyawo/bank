@@ -39,7 +39,7 @@ public class Main {
     private void printUser(Scanner scanner) {
         System.out.println("enter email");
         String  mail = scanner.next();
-        System.out.println(bankService.findByEmail(mail));
+//        System.out.println(bankService.findByEmail(mail));
     }
 
     private void addUser(Scanner scanner) {
