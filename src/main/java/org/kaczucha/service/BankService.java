@@ -2,10 +2,6 @@ package org.kaczucha.service;
 
 import org.kaczucha.Client;
 import org.kaczucha.repository.ClientRepository;
-import org.kaczucha.util.ClientValidator;
-
-import java.util.Optional;
-
 /**
  * korzystając z TDD zaimplementuj metodę deleteClient(String email) która:
  * - usuwa klienta z repozytorium
@@ -25,11 +21,15 @@ public class BankService {
     }
 
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email).orElseThrow();
+        return clientRepository.findByEmail(email);
     }
 
 
-    public void transfer(String fromEmail, String toEmail, double amount) {
+    public void transfer(
+            String fromEmail,
+            String toEmail,
+            double amount
+    ) {
 
         if (amount < 0) {
             throw new IllegalArgumentException("Negative amount is not allowed!");
@@ -37,12 +37,8 @@ public class BankService {
         if (fromEmail.equals(toEmail)) {
             throw new IllegalArgumentException("fromEmail and toEmail cant be equal!");
         }
-
-        Client fromClient = clientRepository.findByEmail(fromEmail)
-                .orElseThrow();
-        Client toClient = clientRepository.findByEmail(toEmail)
-                .orElseThrow();
-
+        Client fromClient = findByEmail(fromEmail);
+        Client toClient = findByEmail(toEmail);
         if (fromClient.getBalance() - amount >= 0) {
             fromClient.setBalance(fromClient.getBalance() - amount);
             toClient.setBalance(toClient.getBalance() + amount);
@@ -61,7 +57,7 @@ public class BankService {
 
         }
 
-        Client byEmail = clientRepository.findByEmail(email.toLowerCase()).orElseThrow();
+        Client byEmail = clientRepository.findByEmail(email.toLowerCase());
 
         if (byEmail.getBalance() - amount < 0) {
             throw new IllegalArgumentException("Cannot withdraw more than u got on ac");
