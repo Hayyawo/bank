@@ -33,11 +33,29 @@
         <scope>test</scope>
     </dependency>
     <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.2.5</version>
+    </dependency>
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.12</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>3.22.0</version>
         <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>6.0.0.Final</version>
+        <type>pom</type>
+    </dependency>
+
     <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
@@ -48,5 +66,11 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>4.5.1</version>
         </dependency>
-    </dependencies>
+    <dependency>
+        <groupId>org.mpierce</groupId>
+        <artifactId>jfixture-hibernate</artifactId>
+        <version>1.0.1</version>
+        <scope>compile</scope>
+    </dependency>
+</dependencies>
 </project>

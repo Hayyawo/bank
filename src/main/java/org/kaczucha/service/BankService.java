@@ -1,7 +1,10 @@
 package org.kaczucha.service;
 
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 import org.kaczucha.repository.ClientRepository;
+
+import java.sql.SQLException;
+
 /**
  * korzystając z TDD zaimplementuj metodę deleteClient(String email) która:
  * - usuwa klienta z repozytorium
@@ -16,7 +19,7 @@ public class BankService {
         this.clientRepository = clientRepository;
     }
 
-    public void save(Client client) {
+    public void save(Client client) throws SQLException {
         clientRepository.save(client);
     }
 

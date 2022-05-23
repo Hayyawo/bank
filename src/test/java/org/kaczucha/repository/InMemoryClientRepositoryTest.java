@@ -3,14 +3,11 @@ package org.kaczucha.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
 
 public class InMemoryClientRepositoryTest {
     private InMemoryClientRepository repository;

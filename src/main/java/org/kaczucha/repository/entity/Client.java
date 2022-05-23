@@ -1,14 +1,16 @@
-package org.kaczucha;
+package org.kaczucha.repository.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.function.DoubleBinaryOperator;
 
 @Entity
 @Table(name = "USERS")
 
+@Data
+@NoArgsConstructor
 public class Client {
     @Id
     @GeneratedValue
@@ -18,71 +20,26 @@ public class Client {
     private String name;
     @Column(name = "MAIL")
     private String email;
-    @Transient
-    private double balance;
 
-    private List<>
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID")
+    private List<Account> accounts;
 
-    public Client(String name, String email, double balance) {
+    public Client(String name, String email, List<Account> accounts) {
         this.name = name;
         this.email = email;
-        this.balance = balance;
-    }
-
-    public Client() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+        this.accounts = accounts;
     }
 
     public double getBalance() {
-        return balance;
+        if (!accounts.isEmpty())
+            return accounts.get(0).getBalance()
+        return 0;
     }
 
-    public void setBalance(double balance) {
-        this.balance = balance;
+    public void setBalance(double newBalance) {
+        if(!accounts.isEmpty())
+            accounts.get(0).setBalance(newBalance);
     }
-
-    @Override
-    public String toString() {
-        return "Client{" +
-                "name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", balance=" + balance +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Double.compare(client.balance, balance) == 0 && Objects.equals(name, client.name) && Objects.equals(email, client.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, email, balance);
-    }
-
 }
+

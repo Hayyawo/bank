@@ -1,7 +1,7 @@
 package org.kaczucha.repository;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 
 import java.util.*;
 

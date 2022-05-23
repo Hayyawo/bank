@@ -4,12 +4,11 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 import org.kaczucha.repository.InMemoryClientRepository;
 import org.kaczucha.service.BankService;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class BankServiceTest {

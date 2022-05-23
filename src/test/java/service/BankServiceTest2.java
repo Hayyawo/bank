@@ -3,15 +3,8 @@ package service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kaczucha.Client;
-import org.kaczucha.repository.InMemoryClientRepository;
+import org.kaczucha.repository.entity.Client;
 import org.kaczucha.service.BankService;
-
-import java.lang.ref.Cleaner;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;

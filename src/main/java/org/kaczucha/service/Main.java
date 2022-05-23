@@ -1,10 +1,12 @@
-package org.kaczucha;
+package org.kaczucha.service;
 
+import org.kaczucha.repository.entity.Account;
+import org.kaczucha.repository.entity.Client;
 import org.kaczucha.repository.ClientRepository;
 import org.kaczucha.repository.HibernateClientRepository;
-import org.kaczucha.service.BankService;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -51,7 +53,9 @@ public class Main {
         String email = scanner.next();
         System.out.println("enter balance");
         Double balance = scanner.nextDouble();
-        bankService.save(new Client(name, email, balance));
+        Account account = new Account(balance, "PLN");
+        List<Account> accounts = List.of(account);
+        bankService.save(new Client(name, email, accounts));
     }
 }
 

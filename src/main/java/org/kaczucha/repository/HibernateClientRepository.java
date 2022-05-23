@@ -2,19 +2,22 @@ package org.kaczucha.repository;
 
 import org.hibernate.Query;
 import org.hibernate.classic.Session;
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class HibernateRepository implements ClientRepository {
+public class HibernateClientRepository implements ClientRepository {
     @Override
     public void save(Client client) throws SQLException {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
+        client.
+                getAccounts().
+                forEach(session::save);
         session.save(client);
         session.getTransaction().commit();
-
+        session.close();
     }
 
     @Override
@@ -26,8 +29,9 @@ public class HibernateRepository implements ClientRepository {
     public Optional<Client> findByEmail(String email) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from Client where mail=:mail", Client.class);
+        Query query = session.createQuery("from Client where mail=:mail");
         query.setParameter("mail", email);
+        session.close();
         return (Optional<Client>) query.uniqueResult();
     }
 

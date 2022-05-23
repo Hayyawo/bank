@@ -1,11 +1,12 @@
 package org.kaczucha.repository;
 
-import org.kaczucha.Client;
+import org.kaczucha.repository.entity.Client;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public interface ClientRepository  {
-    void save(Client client);
+    void save(Client client) throws SQLException;
 
     void deleteClient(String email);
 
