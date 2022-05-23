@@ -1,10 +1,10 @@
 package org.kaczucha;
 
-import org.kaczucha.repository.InMemoryClientRepository;
+import org.kaczucha.repository.ClientRepository;
+import org.kaczucha.repository.HibernateClientRepository;
 import org.kaczucha.service.BankService;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class Main {
     }
 
     public void run() {
-        InMemoryClientRepository repository = new InMemoryClientRepository(new ArrayList<>());
+        ClientRepository repository = new HibernateClientRepository();
         bankService = new BankService(repository);
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -33,6 +33,8 @@ public class Main {
                     break;
                 }
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -42,7 +44,7 @@ public class Main {
 //        System.out.println(bankService.findByEmail(mail));
     }
 
-    private void addUser(Scanner scanner) {
+    private void addUser(Scanner scanner) throws SQLException {
         System.out.println("enter name");
         String name = scanner.next();
         System.out.println("enter email");
