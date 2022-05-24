@@ -4,6 +4,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 import org.kaczucha.repository.InMemoryClientRepository;
 import org.kaczucha.service.BankService;
@@ -28,8 +29,8 @@ public class BankServiceTest {
         //given
         final String emailFrom = "a@a.pl";
         final String emailTo = "b@b.pl";
-        final Client clientFrom = new Client("Alek", emailFrom, 1000);
-        final Client clientTo = new Client("Bartek", emailTo, 500);
+        final Client clientFrom = new Client("Alek", emailFrom, List.of(new Account(1000, "PL")));
+        final Client clientTo = new Client("Bartek", emailTo, List.of(new Account(500, "PL")));
         clients.add(clientFrom);
         clients.add(clientTo);
         final double amount = 100;
@@ -38,8 +39,8 @@ public class BankServiceTest {
         //then
         final Client actualFromClient = service.findByEmail(emailFrom);
         final Client actualToClient = service.findByEmail(emailTo);
-        final Client expectedClientFrom = new Client("Alek", emailFrom, 900);
-        final Client expectedClientTo = new Client("Bartek", emailTo, 600);
+        final Client expectedClientFrom = new Client("Alek", emailFrom, List.of(new Account(900, "PL")));
+        final Client expectedClientTo = new Client("Bartek", emailTo, List.of(new Account(600, "PL")));
 
         final SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
@@ -56,8 +57,8 @@ public class BankServiceTest {
         // given
         final String emailFrom = "a@a.pl";
         final String emailTo = "b@b.pl";
-        final Client clientFrom = new Client("Alek", emailFrom, 1000);
-        final Client clientTo = new Client("Bartek", emailTo, 500);
+        final Client clientFrom = new Client("Alek", emailFrom, List.of(new Account(1000, "PL")));
+        final Client clientTo = new Client("Bartek", emailTo, List.of(new Account(500, "PL")));
         clients.add(clientFrom);
         clients.add(clientTo);
         final double amount = 1000;
@@ -66,8 +67,8 @@ public class BankServiceTest {
         // then
         final Client actualFromClient = service.findByEmail(emailFrom);
         final Client actualToClient = service.findByEmail(emailTo);
-        final Client expectedClientFrom = new Client("Alek", emailFrom, 0);
-        final Client expectedClientTo = new Client("Bartek", emailTo, 1500);
+        final Client expectedClientFrom = new Client("Alek", emailFrom, List.of(new Account(0, "PL")));
+        final Client expectedClientTo = new Client("Bartek", emailTo, List.of(new Account(1500, "PL")));
 
         SoftAssertions softAssertions = new SoftAssertions();
         softAssertions
@@ -84,8 +85,8 @@ public class BankServiceTest {
         // given
         final String emailFrom = "a@a.pl";
         final String emailTo = "b@b.pl";
-        final Client clientFrom = new Client("Alek", emailFrom, 100);
-        final Client clientTo = new Client("Bartek", emailTo, 500);
+        final Client clientFrom = new Client("Alek", emailFrom, List.of(new Account(100, "PL")));
+        final Client clientTo = new Client("Bartek", emailTo, List.of(new Account(100, "PL")));
         clients.add(clientFrom);
         clients.add(clientTo);
         final double amount = 1000;
@@ -101,8 +102,8 @@ public class BankServiceTest {
         // given
         final String emailFrom = "a@a.pl";
         final String emailTo = "b@b.pl";
-        final Client clientFrom = new Client("Alek", emailFrom, 100);
-        final Client clientTo = new Client("Bartek", emailTo, 500);
+        final Client clientFrom = new Client("Alek", emailFrom, List.of(new Account(100, "PL")));
+        final Client clientTo = new Client("Bartek", emailTo, List.of(new Account(100, "PL")));
         clients.add(clientFrom);
         clients.add(clientTo);
         final double amount = -1000;
@@ -119,7 +120,7 @@ public class BankServiceTest {
     public void transfer_toSameClient_thrownException() {
         //given
         final String email = "a@a.pl";
-        final Client client = new Client("Alek", email, 100);
+        final Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         // when/then
         Assertions.assertThrows(
@@ -133,12 +134,12 @@ public class BankServiceTest {
     public void withdraw_correctAmount_balanceChangedCorrectly() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         service.withdraw(email, 50);
         //then
-        Client expectedClient = new Client("Alek", email, 50);
+        Client expectedClient = new Client("Alek", email, List.of(new Account(100, "PL")));
         Assertions.assertTrue(clients.contains(expectedClient));
 
     }
@@ -147,12 +148,12 @@ public class BankServiceTest {
     public void withdraw_allBalance_balanceSetToZero() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         service.withdraw(email,100);
         //then
-        Client expectedClient = new Client("Alek", email,0);
+        Client expectedClient = new Client("Alek", email,List.of(new Account(100, "PL")));
         Assertions.assertTrue(clients.contains(expectedClient));
 
     }
@@ -161,7 +162,7 @@ public class BankServiceTest {
     public void withdraw_negativeAmount_illegalArgumentException() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         int amount = -200;
@@ -177,7 +178,7 @@ public class BankServiceTest {
     public void withdraw_zerAmount_illegalArgumentException() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         int amount = 0;
@@ -193,7 +194,7 @@ public class BankServiceTest {
     public void withdraw_amountBiggerThanBalance_illegalArgumentException() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         int amount = 200;
@@ -224,12 +225,12 @@ public class BankServiceTest {
     public void withdraw_upperCaseEmail_balanceChangedCorrectly() {
         //given
         String email = "A@A.PL";
-        Client client = new Client("Alek", "a@a.pl", 100);
+        Client client = new Client("Alek", "a@a.pl", List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         service.withdraw(email, 50);
         //then
-        Client expectedClient = new Client("Alek", "a@a.pl", 50);
+        Client expectedClient = new Client("Alek", "a@a.pl", List.of(new Account(100, "PL")));
         Assertions.assertTrue(clients.contains(expectedClient));
 
     }
@@ -238,7 +239,7 @@ public class BankServiceTest {
     public void withdraw_nullEmail_IllegalArgumentException() {
         //given
         String email = null;
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
 
@@ -252,12 +253,12 @@ public class BankServiceTest {
     public void withdraw_floatNumber_balanceChangedCorrectly() {
         //given
         String email = "a@a.pl";
-        Client client = new Client("Alek", email, 100);
+        Client client = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(client);
         //when
         service.withdraw(email, 50.5);
         //then
-        Client expectedClient = new Client("Alek", email, 49.5);
+        Client expectedClient = new Client("Alek", email, List.of(new Account(100, "PL")));
         clients.add(expectedClient);
         Assertions.assertTrue(clients.contains(expectedClient));
 

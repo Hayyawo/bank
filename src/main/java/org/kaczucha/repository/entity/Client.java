@@ -1,13 +1,20 @@
 package org.kaczucha.repository.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "users")
 
 @Data
 @NoArgsConstructor
@@ -32,13 +39,14 @@ public class Client {
     }
 
     public double getBalance() {
-        if (!accounts.isEmpty())
-            return accounts.get(0).getBalance()
+        if (!accounts.isEmpty()) {
+            return accounts.get(0).getBalance();
+        }
         return 0;
     }
 
     public void setBalance(double newBalance) {
-        if(!accounts.isEmpty())
+        if (!accounts.isEmpty())
             accounts.get(0).setBalance(newBalance);
     }
 }

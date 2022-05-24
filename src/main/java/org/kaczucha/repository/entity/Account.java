@@ -1,12 +1,17 @@
 package org.kaczucha.repository.entity;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Entity
-@Table(name = "ACCOUNTS")
+@Table(name = "accounts")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

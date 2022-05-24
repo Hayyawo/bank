@@ -44,7 +44,9 @@ public class JDBCClientRepository implements ClientRepository {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
+        return Optional.empty();
     }
 
     @Override

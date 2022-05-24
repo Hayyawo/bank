@@ -22,6 +22,7 @@ public class Main {
         ClientRepository repository = new HibernateClientRepository();
         bankService = new BankService(repository);
         try (Scanner scanner = new Scanner(System.in)) {
+            printUser(scanner);
             while (true) {
                 System.out.println("1. Add user");
                 System.out.println("2. Find user");
@@ -41,9 +42,9 @@ public class Main {
     }
 
     private void printUser(Scanner scanner) {
-        System.out.println("enter email");
-        String  mail = scanner.next();
-//        System.out.println(bankService.findByEmail(mail));
+//        System.out.println("enter email");
+//        String  mail = scanner.next();
+        System.out.println(bankService.findByEmail("bartek@a.pl"));
     }
 
     private void addUser(Scanner scanner) throws SQLException {

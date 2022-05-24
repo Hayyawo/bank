@@ -1,20 +1,19 @@
 package org.kaczucha.repository;
 
 import org.hibernate.Query;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.kaczucha.repository.entity.Client;
 
-import java.sql.SQLException;
 import java.util.Optional;
 
 public class HibernateClientRepository implements ClientRepository {
     @Override
-    public void save(Client client) throws SQLException {
+    public void save(Client client) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        client.
-                getAccounts().
-                forEach(session::save);
+        client
+                .getAccounts()
+                .forEach(session::save);
         session.save(client);
         session.getTransaction().commit();
         session.close();

@@ -1,8 +1,9 @@
 package org.kaczucha.service;
 
-import org.kaczucha.repository.entity.Client;
 import org.kaczucha.repository.ClientRepository;
+import org.kaczucha.repository.entity.Client;
 
+import javax.persistence.EntityNotFoundException;
 import java.sql.SQLException;
 
 /**
@@ -24,7 +25,8 @@ public class BankService {
     }
 
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email);
+        return clientRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
 
@@ -60,7 +62,8 @@ public class BankService {
 
         }
 
-        Client byEmail = clientRepository.findByEmail(email.toLowerCase());
+        Client byEmail = clientRepository.findByEmail(email.toLowerCase())
+                .orElseThrow(EntityNotFoundException::new);
 
         if (byEmail.getBalance() - amount < 0) {
             throw new IllegalArgumentException("Cannot withdraw more than u got on ac");

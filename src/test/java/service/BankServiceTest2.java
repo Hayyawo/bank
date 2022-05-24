@@ -3,8 +3,12 @@ package service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 import org.kaczucha.service.BankService;
+
+import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -46,7 +50,7 @@ transfer(String mailFrom, String mailTo, amount) ma:
     @Test
     public void save_savingAlreadyExistingClient_throw() {
         String email = "a@a.pl";
-        Client client = new Client("jan", email, 100);
+        Client client = new Client("jan", email, List.of(new Account(100, "PL")));
         when(service.findByEmail(email)).thenReturn(client);
 
 
@@ -54,9 +58,9 @@ transfer(String mailFrom, String mailTo, amount) ma:
     }
 
     @Test
-    public void save_savingAlreadyExistingEmail_throw() {
-        Client firstClient = new Client("alek", "a@a.pl", 100);
-        Client secondClient = new Client("marek", "a@a.pl", 2500);
+    public void save_savingAlreadyExistingEmail_throw() throws SQLException {
+        Client firstClient = new Client("alek", "a@a.pl", List.of(new Account(100, "PL")));
+        Client secondClient = new Client("marek", "a@a.pl", List.of(new Account(100, "PL")));
         service.save(firstClient);
         //when/then
         Assertions.assertThrows(IllegalArgumentException.class, () ->
