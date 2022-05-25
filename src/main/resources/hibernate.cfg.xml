@@ -12,6 +12,6 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">none</property>
         <mapping class="org.kaczucha.repository.entity.Client"></mapping>
-        <mapping class="org.kaczucha.repository.entity.Account "></mapping>
+        <mapping class="org.kaczucha.repository.entity.Account"></mapping>
     </session-factory>
 </hibernate-configuration>

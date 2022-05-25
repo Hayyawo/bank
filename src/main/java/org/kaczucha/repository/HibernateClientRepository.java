@@ -9,7 +9,7 @@ import java.util.Optional;
 public class HibernateClientRepository implements ClientRepository {
     @Override
     public void save(Client client) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        final Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
         client
                 .getAccounts()
@@ -30,8 +30,11 @@ public class HibernateClientRepository implements ClientRepository {
         session.beginTransaction();
         Query query = session.createQuery("from Client where mail=:mail");
         query.setParameter("mail", email);
+        Client client = (Client) query.uniqueResult();
         session.close();
-        return (Optional<Client>) query.uniqueResult();
+        return Optional.ofNullable(client);
+
+
     }
 
     @Override
