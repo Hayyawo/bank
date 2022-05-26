@@ -9,12 +9,11 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "USERS")
-
 @Data
 @NoArgsConstructor
 public class Client {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID")
     private Long id;
     @Column(name = "FIRST_NAME")
@@ -22,7 +21,7 @@ public class Client {
     @Column(name = "MAIL")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "USER_ID")
     private List<Account> accounts;
 

@@ -11,10 +11,10 @@ public class HibernateClientRepository implements ClientRepository {
     public void save(Client client) {
         final Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        client
-                .getAccounts()
-                .forEach(session::save);
         session.save(client);
+//        client
+//                .getAccounts()
+//                .forEach(session::save);
         session.getTransaction().commit();
         session.close();
     }
