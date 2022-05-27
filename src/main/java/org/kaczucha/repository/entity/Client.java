@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "CLIENTS")
+@Table(name = "users")
+
 @Data
 @NoArgsConstructor
 public class Client {
@@ -21,9 +22,10 @@ public class Client {
     @Column(name = "MAIL")
     private String email;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
     private List<Account> accounts;
+
 
     public Client(String name, String email, List<Account> accounts) {
         this.name = name;
@@ -38,7 +40,7 @@ public class Client {
     }
 
     public void setBalance(double newBalance) {
-        if(!accounts.isEmpty())
+        if (!accounts.isEmpty())
             accounts.get(0).setBalance(newBalance);
     }
 }

@@ -20,7 +20,7 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ACCOUNT_ID")
-    private long id;
+    private Long id;
     @Column(name = "BALANCE")
     private double balance;
     @Column(name = "CURRENCY")

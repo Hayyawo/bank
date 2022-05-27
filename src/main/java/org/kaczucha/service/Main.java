@@ -26,12 +26,15 @@ public class Main {
             while (true) {
                 System.out.println("1. Add user");
                 System.out.println("2. Find user");
+                System.out.println("3. Delete user");
                 System.out.println("3. Exit");
                 String next = scanner.next();
                 if (Objects.equals(next, "1")) {
                     addUser(scanner);
                 } else if (Objects.equals(next, "2")) {
                     printUser(scanner);
+                } else if (Objects.equals(next, "3")) {
+                    deleteUser(scanner);
                 } else {
                     break;
                 }
@@ -41,9 +44,15 @@ public class Main {
         }
     }
 
+    private void deleteUser(Scanner scanner) {
+        System.out.println("enter email");
+        String mail = scanner.next();
+        bankService.deleteClient(mail);
+    }
+
     private void printUser(Scanner scanner) {
         System.out.println("enter email");
-        String  mail = scanner.next();
+        String mail = scanner.next();
         System.out.println(bankService.findByEmail(mail));
     }
 

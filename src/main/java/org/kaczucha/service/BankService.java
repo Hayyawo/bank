@@ -16,12 +16,17 @@ import java.sql.SQLException;
 public class BankService {
     private final ClientRepository clientRepository;
 
+
     public BankService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
     public void save(Client client) throws SQLException {
         clientRepository.save(client);
+    }
+
+    public void deleteClient(String email) {
+        clientRepository.deleteClient(email);
     }
 
     public Client findByEmail(String email) {
