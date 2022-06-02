@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 public class Account {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ACCOUNT_ID")
     private long id;
     @Column(name = "BALANCE")

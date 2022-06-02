@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "CLIENTS")
 @Data
 @NoArgsConstructor
 public class Client {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
     private Long id;
     @Column(name = "FIRST_NAME")

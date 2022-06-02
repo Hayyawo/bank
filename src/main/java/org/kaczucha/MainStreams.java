@@ -3,6 +3,7 @@ package org.kaczucha;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
@@ -79,14 +80,13 @@ public class MainStreams {
 //    }
 
     public static void task1(List<String> list) {
-        list.stream()
-                .forEach(System.out::println);
+        list.forEach(System.out::println);
         //print all elements
     }
 
     public static void task2(List<String> list) {
         list.stream()
-                .map(s -> s.toUpperCase(Locale.ROOT))
+                .map(s -> s.toUpperCase(Locale.ENGLISH))
                 .forEach(System.out::println);
         //print all elements in upper case
     }
@@ -104,7 +104,7 @@ public class MainStreams {
 
 
         list.stream()
-                .sorted()
+                .sorted(Comparator.comparingInt(String::length))
                 .forEach(System.out::println);
         //print all elements sorted by number of letters
     }
@@ -127,10 +127,11 @@ public class MainStreams {
     }
 
     public static void task7(List<String> list) {
-        boolean empty = list.stream().findAny().isEmpty();
-
-        System.out.println(empty);
-        //pint "true" if any of the elements is empty, "false" otherwise
+//        boolean empty = list.stream().findAny().isEmpty();
+        boolean b = list.stream()
+                .anyMatch(String::isEmpty);
+        System.out.println(b);
+        //print "true" if any of the elements is empty, "false" otherwise
     }
 
     public static void task8(List<String> list) {
@@ -151,16 +152,22 @@ public class MainStreams {
     }
 
     public static void task10(List<String> list) {
-        String s1 = list.stream()
-                .max(Comparator.comparing(s -> s))
+//        String s1 = list.stream()
+//                .max(Comparator.comparing(s -> s))
+//                .get();
+
+        Integer integer = list.stream()
+                .map(String::length)
+                .max(Comparator.comparingInt(o -> o))
                 .get();
 
-        System.out.println(s1);
+        System.out.println(integer);
         //print highest number of letters
     }
 
     public static void task11(List<String> list) {
-        String s2 = list.stream()
+        Integer s2 = list.stream()
+                .map(String::length)
                 .min(Comparator.comparing(s -> s))
                 .get();
 
@@ -171,8 +178,8 @@ public class MainStreams {
 
     public static void task12(List<String> list) {
         long count = list.stream()
-                .mapToInt(str -> str.length())
-                        .sum();
+                .mapToInt(String::length)
+                .sum();
 
         System.out.println(count);
         //print sum of all numbers of letters
