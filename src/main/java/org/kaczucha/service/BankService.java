@@ -1,7 +1,11 @@
 package org.kaczucha.service;
 
-import org.kaczucha.Client;
 import org.kaczucha.repository.ClientRepository;
+import org.kaczucha.repository.entity.Client;
+
+import javax.persistence.EntityNotFoundException;
+import java.sql.SQLException;
+
 /**
  * korzystając z TDD zaimplementuj metodę deleteClient(String email) która:
  * - usuwa klienta z repozytorium
@@ -12,16 +16,22 @@ import org.kaczucha.repository.ClientRepository;
 public class BankService {
     private final ClientRepository clientRepository;
 
+
     public BankService(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 
-    public void save(Client client) {
+    public void save(Client client) throws SQLException {
         clientRepository.save(client);
     }
 
+    public void deleteClient(String email) {
+        clientRepository.deleteClient(email);
+    }
+
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email);
+        return clientRepository.findByEmail(email)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
 
@@ -57,7 +67,8 @@ public class BankService {
 
         }
 
-        Client byEmail = clientRepository.findByEmail(email.toLowerCase());
+        Client byEmail = clientRepository.findByEmail(email.toLowerCase())
+                .orElseThrow(EntityNotFoundException::new);
 
         if (byEmail.getBalance() - amount < 0) {
             throw new IllegalArgumentException("Cannot withdraw more than u got on ac");
