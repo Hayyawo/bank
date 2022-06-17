@@ -30,4 +30,8 @@ public class Account {
         this.balance = balance;
         this.currency = currency;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

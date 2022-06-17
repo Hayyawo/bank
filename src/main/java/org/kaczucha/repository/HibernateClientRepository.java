@@ -3,9 +3,11 @@ package org.kaczucha.repository;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,52 +15,62 @@ public class HibernateClientRepository implements ClientRepository {
     @Override
     public void save(Client client) {
         final Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
+        Transaction transaction = session.beginTransaction();
 //        client
 //                .getAccounts()
 //                .forEach(session::save);
+
         session.save(client);
-        session.getTransaction().commit();
+
+        transaction.commit();
         session.close();
     }
 
     @Override
     public void deleteClient(String email) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("from Client where mail=:mail",Client.class);
+
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        Transaction transaction = session.beginTransaction();
+        Query query = session.createQuery("from Client where mail=:mail");
         query.setParameter("mail", email);
         Client client = (Client) query.uniqueResult();
-//        Client cliet1 = session.find(Client.class, client.getId());
-        session.delete(client);
-        System.out.println(client.getId());
-        System.out.println(client.getName());
-        System.out.println(client.getEmail());
-        System.out.println(client.getAccounts());
+
+        client.getAccounts().forEach(session::remove);
+        transaction.commit();
+
+        transaction.begin();
+
+        session.remove(client);
+        transaction.commit();
+//        session.getTransaction().commit();
+
+        sessionFactory.close();
+    }
+
+    @Override
+    public void withdraw(String email, double amount, int accountId) {
+        System.out.println("sadggsfg FDSGD" );
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Client where mail=:mail");
+        query.setParameter("mail", email);
+        Client client = (Client) query.uniqueResult();
+
+        Optional<Client> byEmail = findByEmail(email);
+        Account account = byEmail.get().getAccounts().get(accountId);
 
 
 
+        System.out.println("sadggsfg FDSGD" + account.getId());
         session.getTransaction().commit();
         session.close();
+    }
 
-        //Create session factory object
-//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-//        //getting session object from session factory
-//        Session session = sessionFactory.openSession();
-//        //getting transaction object from session object
-//        session.beginTransaction();
-////        Client client = (Client) session.load(Client.class, 3);
-//        Query query = session.createQuery("from Client where mail=:mail");
-//        query.setParameter("mail", email);
-//        Client client = (Client) query.uniqueResult();
-//
-//        Client client1 = session.find(Client.class, 3L);
-//
-//        session.delete(client1);
-//
-//        System.out.println("Deleted Successfully");
-//        session.getTransaction().commit();
-//        sessionFactory.close();
+    public void transfer(String emailFrom, String emailTo, double amount) {
+
     }
 
     @Override
@@ -82,5 +94,32 @@ public class HibernateClientRepository implements ClientRepository {
     @Override
     public boolean notExistsByEmail(String email) {
         return false;
+    }
+
+
+    @Override
+    public void modifyUserName(String email, String newName) {
+        findByEmail(email);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Client where mail=:mail");
+        query.setParameter("mail", email);
+        Client client = (Client) query.uniqueResult();
+        client.setName(newName);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
+    public void modifyUserEmail(String email, String newEmail) {
+        findByEmail(email);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Client where mail=:mail");
+        query.setParameter("mail", email);
+        Client client = (Client) query.uniqueResult();
+        client.setEmail(newEmail);
+        session.getTransaction().commit();
+        session.close();
     }
 }

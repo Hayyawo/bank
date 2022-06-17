@@ -5,7 +5,7 @@ import org.kaczucha.repository.entity.Client;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public interface ClientRepository  {
+public interface ClientRepository {
     void save(Client client) throws SQLException;
 
     void deleteClient(String email);
@@ -15,4 +15,10 @@ public interface ClientRepository  {
     boolean existsByEmail(String email);
 
     boolean notExistsByEmail(String email);
+
+    void withdraw(String email, double amount, int accountId);
+
+    void modifyUserName(String email, String newName);
+
+    void modifyUserEmail(String email, String newEmail);
 }

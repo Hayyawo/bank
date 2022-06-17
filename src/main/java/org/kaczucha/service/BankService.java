@@ -25,13 +25,22 @@ public class BankService {
         clientRepository.save(client);
     }
 
+
+
+    public void modifyUserName(String email, String newName) {
+        clientRepository.modifyUserName(email, newName);
+    }
+
+    public void modifyUserEmail(String email, String newEmail) {
+        clientRepository.modifyUserEmail(email, newEmail);
+    }
+
     public void deleteClient(String email) {
         clientRepository.deleteClient(email);
     }
 
     public Client findByEmail(String email) {
-        return clientRepository.findByEmail(email)
-                .orElseThrow(EntityNotFoundException::new);
+        return clientRepository.findByEmail(email).orElseThrow();
     }
 
 
@@ -39,7 +48,7 @@ public class BankService {
             String fromEmail,
             String toEmail,
             double amount
-    ) {
+    ) throws SQLException {
 
         if (amount < 0) {
             throw new IllegalArgumentException("Negative amount is not allowed!");
@@ -55,9 +64,13 @@ public class BankService {
         } else {
             throw new IllegalArgumentException("Not enough funds!");
         }
+        clientRepository.save(fromClient);
+        clientRepository.save(toClient);
     }
 
-    public void withdraw(String email, double amount) {
+
+    public void withdraw(String email, double amount,  int accountId) {
+        clientRepository.withdraw(email,amount,accountId);
         if (email == null) {
             throw new IllegalArgumentException("email cannot be null");
         }

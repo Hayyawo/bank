@@ -15,12 +15,7 @@ public class InMemoryClientRepositoryTest {
     private InMemoryClientRepository repository;
     private ArrayList<Client> clients;
 
-//    Praca domowa:
-//    korzystając z TDD zaimplementuj metodę deleteClient(String email) która:
-//            - usuwa klienta z repozytorium
-//- rzuca wyjątek w przypadku nieprawidłowego maila
-//- nie pozwala na null maila
-//- nie pozwala na usunięcie klienta jeżeli balance != 0
+
 
     @BeforeEach
     public void setup() {

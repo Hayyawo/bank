@@ -3,6 +3,7 @@ package org.kaczucha.repository;
 import org.apache.commons.lang3.StringUtils;
 import org.kaczucha.repository.entity.Client;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 public class InMemoryClientRepository implements ClientRepository {
@@ -20,14 +21,6 @@ public class InMemoryClientRepository implements ClientRepository {
         if (client.getBalance() < 0) {
             throw new IllegalArgumentException("Cannot add client with negative balance");
         }
-        ////
-//        if (client.equals(findByEmail(client.getEmail()))) {
-//            throw new IllegalArgumentException("cannot add same client");
-//        }
-//        Client clientFromDb = findByEmail(client.getEmail());
-//        if (client.getEmail().equals(clientFromDb.getEmail())) {
-//            throw new IllegalArgumentException("cannot add same client with same @");
-//        }
         if (existsByEmail(client.getEmail())) {
             throw new IllegalArgumentException("cannot add same client with same @");
         }
@@ -35,12 +28,6 @@ public class InMemoryClientRepository implements ClientRepository {
 
         clients.add(client);
 
-        /**
-         * client.getEmail()  .equals(    findByEmail(email)     ) TO SAMO
-         * STRING                            CLIENT
-         *
-         * findByEmail(...).equals(client.getEmail()) TO SAMO
-         */
     }
 
     @Override
@@ -85,4 +72,28 @@ public class InMemoryClientRepository implements ClientRepository {
         return clients.stream()
                 .noneMatch(client -> StringUtils.equalsIgnoreCase(client.getEmail(), email));
     }
+
+    @Override
+    public void withdraw(String email, double amount, int accountId) {
+
+    }
+
+
+    @Override
+    public void modifyUserName(String email, String newUserName) {
+        Optional<Client> byEmail = findByEmail(email);
+        Client client = (Client) byEmail.get();
+        client.setName(newUserName);
+        System.out.println(client.toString());
+    }
+
+    @Override
+    public void modifyUserEmail(String email, String newEmail) {
+        Optional<Client> byEmail = findByEmail(email);
+        Client client = (Client) byEmail.get();
+        client.setEmail(newEmail);
+        System.out.println(client.toString());
+    }
+
+
 }
