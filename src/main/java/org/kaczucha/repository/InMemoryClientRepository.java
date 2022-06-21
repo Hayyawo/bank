@@ -1,13 +1,15 @@
 package org.kaczucha.repository;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
+import java.util.stream.Stream;
 
 public class InMemoryClientRepository implements ClientRepository {
     private List<Client> clients;
+    private List<Account> accounts;
 
     public InMemoryClientRepository(List<Client> clients) {
         this.clients = clients;
@@ -31,6 +33,11 @@ public class InMemoryClientRepository implements ClientRepository {
     }
 
     @Override
+    public void saveAccount(Account account,int clientId) {
+        accounts.add(account);
+    }
+
+    @Override
     public void deleteClient(String email) {
         if (email == null) {
             throw new IllegalArgumentException("email cannot be null");
@@ -45,6 +52,12 @@ public class InMemoryClientRepository implements ClientRepository {
 
         clients.remove(client.get());
     }
+
+    @Override
+    public void deleteAccount(int accountId) {
+
+    }
+
 
     @Override
     public Optional<Client> findByEmail(String email) {
@@ -74,7 +87,17 @@ public class InMemoryClientRepository implements ClientRepository {
     }
 
     @Override
-    public void withdraw(String email, double amount, int accountId) {
+    public void withdraw(double amount, int accountId) {
+
+    }
+
+    @Override
+    public void transfer(String emailFrom, String emailTo, double amount) {
+
+    }
+
+    @Override
+    public void deposit(String email, double amount, int accountId) {
 
     }
 

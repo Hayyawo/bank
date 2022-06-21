@@ -1,5 +1,6 @@
 package org.kaczucha.service;
 
+
 import org.kaczucha.repository.InMemoryClientRepository;
 import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
@@ -52,8 +53,6 @@ public class Main {
                 } else if (Objects.equals(next, "4")) {
 
                     while (true) {
-
-
                         System.out.println("1. Modify user name");
                         System.out.println("2. Modify user mail");
                         System.out.println("0. Exit");
@@ -64,16 +63,10 @@ public class Main {
                         System.out.println(repository.findByEmail(searchingMail));
 
                         if (Objects.equals(next1, "1")) {
-                            System.out.println("New name");
-                            String newName = scanner.next();
-                            bankService.modifyUserName(searchingMail, newName);
-                            System.out.println(repository.findByEmail(searchingMail));
-
+                            modifyUserName(repository, scanner, searchingMail);
                         }
                         if (Objects.equals(next1, "2")) {
-                            System.out.println("new Email");
-                            String newEmail = scanner.next();
-                            bankService.modifyUserEmail(searchingMail, newEmail);
+                            modifyUserEmail(scanner, searchingMail);
 
                         } else if (Objects.equals(next1, "0")) {
                             break;
@@ -82,12 +75,7 @@ public class Main {
 
                 } else if (Objects.equals(next, "5")) {
                     while (true) {
-                        System.out.println("Search accounts by email that belongs to them");
-                        String searchingMail = scanner.next();
-                        Optional<Client> byEmail = repository.findByEmail(searchingMail);
-                        List<Account> accounts = byEmail.get().getAccounts();
-                        System.out.println("Following user got those accounts");
-                        System.out.println("User name " + byEmail.get().getName() + "\n" + accounts);
+
 
                         System.out.println("1. Deposit funds");
                         System.out.println("2. Withdraw funds");
@@ -96,33 +84,23 @@ public class Main {
                         System.out.println("5. Delete account from following user");
                         System.out.println("0. Exit");
                         String next1 = scanner.next();
-
+                        System.out.println("Search accounts by email that belongs to them");
+                        String searchingMail = scanner.next();
+                        Optional<Client> byEmail = repository.findByEmail(searchingMail);
+                        List<Account> accounts = byEmail.get().getAccounts();
+                        System.out.println("Following user got those accounts");
+                        System.out.println("User name " + byEmail.get().getName() + "\n" + accounts);
 
                         if (Objects.equals(next1, "1")) {
-                            System.out.println();
+                            depositFunds(scanner);
                         } else if (Objects.equals(next1, "2")) {
-                            System.out.println("Type email which you wont withdraw from");
-                            String fromEmail = scanner.next();
-                            System.out.println("Type amount");
-                            double amount = scanner.nextDouble();
-                            System.out.println("Type acc id");
-                            int accountId = scanner.nextInt();
-                            bankService.withdraw(fromEmail, amount, accountId);
-
+                            withdrawFunds(scanner);
                         } else if (Objects.equals(next1, "3")) {
-                            System.out.println("Type email which you wont transfer from");
-                            String fromEmail = scanner.next();
-                            System.out.println("Type email which you wont transfer to");
-                            String toEmail = scanner.next();
-                            System.out.println("Type amount");
-                            double amount = scanner.nextDouble();
-
-
-                            bankService.transfer(fromEmail, toEmail, amount);
+                            transferFunds(scanner);
                         } else if (Objects.equals(next1, "4")) {
-
+                            addAccount(scanner);
                         } else if (Objects.equals(next1, "5")) {
-
+                            deleteAccount(scanner);
                         } else {
                             break;
                         }
@@ -137,6 +115,68 @@ public class Main {
             throwables.printStackTrace();
         }
 
+    }
+
+    private void modifyUserName(ClientRepository repository, Scanner scanner, String searchingMail) {
+        System.out.println("New name");
+        String newName = scanner.next();
+        bankService.modifyUserName(searchingMail, newName);
+        System.out.println(repository.findByEmail(searchingMail));
+    }
+
+    private void modifyUserEmail(Scanner scanner, String searchingMail) {
+        System.out.println("new Email");
+        String newEmail = scanner.next();
+        bankService.modifyUserEmail(searchingMail, newEmail);
+    }
+
+    private void depositFunds(Scanner scanner) {
+        System.out.println("Type email which you wont deposit to");
+        String fromEmail = scanner.next();
+        System.out.println("Type amount");
+        double amount = scanner.nextDouble();
+        System.out.println("Type acc id");
+        int accountId = scanner.nextInt();
+        bankService.deposit(fromEmail, amount, accountId);
+    }
+
+    private void withdrawFunds(Scanner scanner) {
+        System.out.println("Type email which you wont withdraw from");
+        String fromEmail = scanner.next();
+        System.out.println("Type amount");
+        double amount = scanner.nextDouble();
+        System.out.println("Type acc id");
+        int accountId = scanner.nextInt();
+        bankService.withdraw(fromEmail, amount, accountId);
+    }
+
+    private void transferFunds(Scanner scanner) throws SQLException {
+        System.out.println("Type email which you wont transfer from");
+        String fromEmail = scanner.next();
+        System.out.println("Type email which you wont transfer to");
+        String toEmail = scanner.next();
+        System.out.println("Type amount");
+        double amount = scanner.nextDouble();
+
+
+        bankService.transfer(fromEmail, toEmail, amount);
+    }
+
+    private void deleteAccount(Scanner scanner) {
+        System.out.println("Type account id to delete it");
+        int accountId = scanner.nextInt();
+        bankService.deleteAccount(accountId);
+    }
+
+    private void addAccount(Scanner scanner) {
+        System.out.println("Enter user id");
+        int clientId = scanner.nextInt();
+        System.out.println("enter balance");
+        Double balance = scanner.nextDouble();
+
+        Account account = new Account(balance, "PLN");
+
+        bankService.saveAccount(account, clientId);
     }
 
 
@@ -163,5 +203,6 @@ public class Main {
         List<Account> accounts = List.of(account);
         bankService.save(new Client(name, email, accounts));
     }
+
 }
 

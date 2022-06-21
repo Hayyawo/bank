@@ -27,13 +27,47 @@ public class HibernateClientRepository implements ClientRepository {
     }
 
     @Override
+    public void saveAccount(Account account, int clientId) {
+
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        Client client = session.find(Client.class, (long) clientId);
+        System.out.println(client.getName() + " " + client.getId());
+        List<Account> accounts = client.getAccounts();
+
+        accounts.add(account);
+
+        client.setAccounts(accounts);
+        transaction.commit();
+        sessionFactory.close();
+    }
+    @Override
+    public void deleteAccount(int accountId) {
+
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        Transaction transaction = session.beginTransaction();
+
+        Account account = session.find(Account.class, (long)accountId);
+        session.remove(account);
+
+        transaction.commit();
+        sessionFactory.close();
+    }
+
+
+    @Override
     public void deleteClient(String email) {
 
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
 
         Transaction transaction = session.beginTransaction();
-        Query query = session.createQuery("from Client where mail=:mail");
+        Query query = session.createQuery("from Account where account_id=:account_id");
         query.setParameter("mail", email);
         Client client = (Client) query.uniqueResult();
 
@@ -50,26 +84,51 @@ public class HibernateClientRepository implements ClientRepository {
     }
 
     @Override
-    public void withdraw(String email, double amount, int accountId) {
-        System.out.println("sadggsfg FDSGD" );
-
+    public void withdraw(double amount, int accountId) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from Client where mail=:mail");
-        query.setParameter("mail", email);
-        Client client = (Client) query.uniqueResult();
+        Query query = session.createQuery("from Account where account_id=:account_id");
+        query.setParameter("account_id", accountId);
+        Account account = (Account) query.uniqueResult();
 
-        Optional<Client> byEmail = findByEmail(email);
-        Account account = byEmail.get().getAccounts().get(accountId);
+        account.setBalance(account.getBalance() - amount);
 
-
-
-        System.out.println("sadggsfg FDSGD" + account.getId());
+        System.out.println("Your current balance is " + account.getBalance());
         session.getTransaction().commit();
         session.close();
     }
 
+    @Override
+    public void deposit(String email, double amount, int accountId) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Account where account_id=:account_id");
+        query.setParameter("account_id", accountId);
+        Account account = (Account) query.uniqueResult();
+
+        account.setBalance(account.getBalance() + amount);
+
+        System.out.println("Your current balance is " + account.getBalance());
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    @Override
     public void transfer(String emailFrom, String emailTo, double amount) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from Client where mail=:mail");
+        query.setParameter("mail", emailFrom);
+        Client client = (Client) query.uniqueResult();
+        client.setBalance(client.getBalance() - amount);
+
+        Query query1 = session.createQuery("from Client where mail=:mail");
+
+        query1.setParameter("mail", emailTo);
+        Client client1 = (Client) query1.uniqueResult();
+        client1.setBalance(client1.getBalance() + amount);
+        session.getTransaction().commit();
+        session.close();
 
     }
 

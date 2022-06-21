@@ -1,6 +1,7 @@
 package org.kaczucha.service;
 
 import org.kaczucha.repository.ClientRepository;
+import org.kaczucha.repository.entity.Account;
 import org.kaczucha.repository.entity.Client;
 
 import javax.persistence.EntityNotFoundException;
@@ -21,11 +22,22 @@ public class BankService {
         this.clientRepository = clientRepository;
     }
 
+    public void deleteAccount(int accountId) {
+        clientRepository.deleteAccount(accountId);
+    }
+
+    public void saveAccount(Account account, int clientId) {
+        clientRepository.saveAccount(account, clientId);
+    }
+
     public void save(Client client) throws SQLException {
         clientRepository.save(client);
     }
 
+    public void deposit(String email, double amount, int accountId) {
+        clientRepository.deposit(email, amount, accountId);
 
+    }
 
     public void modifyUserName(String email, String newName) {
         clientRepository.modifyUserName(email, newName);
@@ -49,7 +61,7 @@ public class BankService {
             String toEmail,
             double amount
     ) throws SQLException {
-
+        clientRepository.transfer(fromEmail, toEmail, amount);
         if (amount < 0) {
             throw new IllegalArgumentException("Negative amount is not allowed!");
         }
@@ -69,8 +81,8 @@ public class BankService {
     }
 
 
-    public void withdraw(String email, double amount,  int accountId) {
-        clientRepository.withdraw(email,amount,accountId);
+    public void withdraw(String email, double amount, int accountId) {
+        clientRepository.withdraw(amount, accountId);
         if (email == null) {
             throw new IllegalArgumentException("email cannot be null");
         }

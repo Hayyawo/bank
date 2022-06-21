@@ -36,6 +36,7 @@ public class InMemoryClientRepositoryTest {
 //        assert actualClient.equals(expectedClient);
         assertEquals(expectedClient, actualClient);
 
+
     }
 
 
